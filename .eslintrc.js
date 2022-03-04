@@ -13,12 +13,17 @@ module.exports = {
     'next/core-web-vitals',
   ],
   rules: {
+    semi: 0,
     'prettier/prettier': [
-      1,
+      'warn',
       {
-        endOfLine: 'auto',
-        singleQuote: true,
         semi: false,
+        singleQuote: true,
+        printWidth: 125,
+        tabWidth: 2,
+        trailingComma: 'es5',
+        bracketSpacing: true,
+        endOfLine: 'auto',
       },
     ],
   },
