@@ -1,19 +1,36 @@
-import React, { useRef } from 'react'
-import { LockClosedIcon } from '@heroicons/react/solid'
+import React, { useRef, useState } from 'react'
+import { LockClosedIcon, ExclamationIcon } from '@heroicons/react/solid'
+import { useAuth } from '@hooks/useAuth'
+import Modal from '@common/Modal'
 
 export default function LoginPage() {
   const emailRef = useRef(null)
   const passwordRef = useRef(null)
+  const [open, setOpen] = useState(false)
+  const [status, setStatus] = useState(0)
 
-  const handleSubmit = (e) => {
+  const auth = useAuth()
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const email = emailRef.current.value
     const password = passwordRef.current.value
-    console.log(email, password)
+
+    try {
+      await auth.signIn(email, password)
+    } catch (error) {
+      if (error.response.status === 401) {
+        setStatus(401)
+        setOpen(!open)
+      }
+    }
   }
 
   return (
     <>
+      <Modal open={open} setOpen={setOpen} status={status}>
+        <div>Your email or password seems to be missing a few details. Please try again</div>
+      </Modal>
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>

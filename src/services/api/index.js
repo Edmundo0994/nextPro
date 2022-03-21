@@ -1,5 +1,5 @@
-const API = process.env.NEX_PUBLIC_API_URL
-const VERSION = process.env.NEX_PUBLIC_API_VERSION
+const API = process.env.NEXT_PUBLIC_API_URL
+const VERSION = process.env.NEXT_PUBLIC_API_VERSION
 
 const endPoints = {
   auth: {
@@ -7,14 +7,13 @@ const endPoints = {
     profile: `${API}/${VERSION}/auth/profile`,
   },
   products: {
-    getProducts: `${API}/${VERSION}/products`, // GET
+    getProducts: (limit, offset) => `${API}/${VERSION}/products?limit=${limit}&offset=${offset}`, // GET
     createProduct: `${API}/${VERSION}/products`, // POST JSON
     getProduct: (id) => `${API}/${VERSION}/products/${id}`, // GET
     updateProduct: (id) => `${API}/${VERSION}/products/${id}`, // PUT
     deleteProduct: (id) => `${API}/${VERSION}/products/${id}`, // DELETE
   },
   users: {
-    getUsers: `${API}/${VERSION}/users`, // GET
     createUser: `${API}/${VERSION}/users`, // POST JSON
     emailIsAvailable: `${API}/${VERSION}/users/is-available`, // POST JSON
   },
