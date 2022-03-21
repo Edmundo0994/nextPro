@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { LockClosedIcon, ExclamationIcon } from '@heroicons/react/solid'
+import { LockClosedIcon } from '@heroicons/react/solid'
 import { useAuth } from '@hooks/useAuth'
 import Modal from '@common/Modal'
 
