@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import { useRouter } from 'next/router'
 import { LockClosedIcon } from '@heroicons/react/solid'
 import { useAuth } from '@hooks/useAuth'
 import Modal from '@common/Modal'
@@ -8,6 +9,7 @@ export default function LoginPage() {
   const passwordRef = useRef(null)
   const [open, setOpen] = useState(false)
   const [status, setStatus] = useState(0)
+  const router = useRouter()
 
   const auth = useAuth()
 
@@ -18,6 +20,7 @@ export default function LoginPage() {
 
     try {
       await auth.signIn(email, password)
+      router.push('/dashboard')
     } catch (error) {
       if (error.response.status === 401) {
         setStatus(401)
