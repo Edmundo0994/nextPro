@@ -1,10 +1,25 @@
 import FooterPag from '@common/FooterPag'
 import useProducts from '@hooks/useProducts'
+import BarChart from '@common/BarChart'
+import { useEffect, useState } from 'react'
 
 export default function Dashboard() {
   const products = useProducts()
+
+  const data = {
+    datasets: [
+      {
+        label: 'Categories',
+        data: products.dataChart,
+        borderWidth: 2,
+        backgroundColor: ['#1e3a8a', '#981919', '#981954', '#987521'],
+      },
+    ],
+  }
+
   return (
     <>
+      <BarChart chartData={data} />
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

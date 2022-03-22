@@ -6,7 +6,16 @@ const useProducts = () => {
   const [offset, setOffset] = useState(0)
   const [page, setPage] = useState(0)
   const PRODUCTS_LIMIT = 5
-  const [products, setProducts] = useState(null)
+  const [products, setProducts] = useState([])
+  const [dataChart, setDataChart] = useState([])
+
+  useEffect(() => {
+    const categoryNames = products.data?.map((product) => product.category)
+    const categoryCount = categoryNames?.map((category) => category.name)
+
+    const countOccurrences = (arr) => arr?.reduce((prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), {})
+    setDataChart(countOccurrences(categoryCount))
+  }, [products])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,6 +35,7 @@ const useProducts = () => {
     setOffset,
     setPage,
     PRODUCTS_LIMIT,
+    dataChart,
   }
 }
 
