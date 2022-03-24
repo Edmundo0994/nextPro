@@ -1,17 +1,18 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useRouter } from 'next/router'
 import { LockClosedIcon } from '@heroicons/react/solid'
 import { useAuth } from '@hooks/useAuth'
-import Modal from '@common/Modal'
+import ModalInfo from '@common/ModalInfo'
+import useModalInfo from '@hooks/useModalInfo'
+import { ERROR } from '@services/api/products'
 
 export default function LoginPage() {
   const emailRef = useRef(null)
   const passwordRef = useRef(null)
-  const [open, setOpen] = useState(false)
-  const [status, setStatus] = useState(0)
   const router = useRouter()
 
   const auth = useAuth()
+  const { modalInfo, setModalInfo, toggleModalInfo } = useModalInfo()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -23,17 +24,19 @@ export default function LoginPage() {
       router.push('/dashboard')
     } catch (error) {
       if (error.response.status === 401) {
-        setStatus(401)
-        setOpen(!open)
+        console.log(error)
+        setModalInfo({
+          active: true,
+          type: ERROR,
+          message: 'There was an error with your credentials, please try again',
+        })
       }
     }
   }
 
   return (
     <>
-      <Modal open={open} setOpen={setOpen} status={status}>
-        <div>Your email or password seems to be missing a few details. Please try again</div>
-      </Modal>
+      <ModalInfo toggleModalInfo={toggleModalInfo} modalInfo={modalInfo} />
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>

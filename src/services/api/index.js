@@ -8,6 +8,7 @@ const endPoints = {
   },
   products: {
     getProducts: (limit, offset) => `${API}/${VERSION}/products?limit=${limit}&offset=${offset}`, // GET
+    getAllProducts: `${API}/${VERSION}/products`, // GET
     createProduct: `${API}/${VERSION}/products`, // POST JSON
     getProduct: (id) => `${API}/${VERSION}/products/${id}`, // GET
     updateProduct: (id) => `${API}/${VERSION}/products/${id}`, // PUT

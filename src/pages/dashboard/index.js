@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import FooterPag from '@common/FooterPag'
-import useProducts from '@hooks/useProducts'
+import Modal from '@common/Modal'
 import BarChart from '@common/BarChart'
-import { useEffect, useState } from 'react'
+import useProducts from '@hooks/useProducts'
 
 export default function Dashboard() {
+  const [openForm, setOpenForm] = useState(false)
   const products = useProducts()
 
   const data = {
@@ -20,6 +22,7 @@ export default function Dashboard() {
   return (
     <>
       <BarChart chartData={data} />
+      {/* <Products /> */}
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -51,9 +54,6 @@ export default function Dashboard() {
                     >
                       Id
                     </th>
-                    <th scope="col" className="relative px-6 py-3">
-                      <span className="sr-only">Edit</span>
-                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -79,16 +79,6 @@ export default function Dashboard() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.id}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/edit" className="text-indigo-600 hover:text-indigo-900">
-                          Edit
-                        </a>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/edit" className="text-indigo-600 hover:text-indigo-900">
-                          Delete
-                        </a>
-                      </td>
                     </tr>
                   ))}
                 </tbody>

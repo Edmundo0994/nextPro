@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import endPoints from '@services/api'
-import axios from 'axios'
+import { getProducts } from '@services/api/products'
 
 const useProducts = () => {
   const [offset, setOffset] = useState(0)
   const [page, setPage] = useState(0)
-  const PRODUCTS_LIMIT = 5
+  const PRODUCTS_LIMIT = 10
   const [products, setProducts] = useState([])
   const [dataChart, setDataChart] = useState([])
 
@@ -19,7 +18,7 @@ const useProducts = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios(endPoints.products.getProducts(PRODUCTS_LIMIT, offset))
+      const res = await getProducts(PRODUCTS_LIMIT, offset)
       setProducts(res)
     }
     try {
