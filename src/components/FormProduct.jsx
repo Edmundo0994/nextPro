@@ -1,10 +1,37 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { formProductSchema } from '@services/joiSchema'
 import ModalInfo from '@common/ModalInfo'
-import { ERROR, PRODUCT_CREATED, addProduct } from '@services/api/products'
+import { ERROR, PRODUCT_CREATED, addProduct, updateProduct } from '@services/api/products'
+import { useAlert } from '@hooks/useAlert'
+import { useRouter } from 'next/router'
 
-export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, setAlert, setOpenForm }) {
+export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, setOpenForm, product }) {
+  const { setAlert } = useAlert()
   const formRef = useRef(null)
+  const categorySelect = useRef(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    switch (product?.category?.id) {
+      case 1:
+        categorySelect.current.children[0].selected = true
+        break
+      case 2:
+        categorySelect.current.children[1].selected = true
+        break
+      case 3:
+        categorySelect.current.children[2].selected = true
+        break
+      case 4:
+        categorySelect.current.children[3].selected = true
+        break
+      case 5:
+        categorySelect.current.children[4].selected = true
+        break
+      default:
+        break
+    }
+  }, [product])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -24,27 +51,37 @@ export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, 
         message: error.message,
       })
     } else {
-      try {
-        await addProduct(value)
-        setAlert({
-          active: true,
-          message: '¡Your product was successfully created!',
-          type: PRODUCT_CREATED,
-          autoClose: true,
-        })
-        setOpenForm(false)
-      } catch (err) {
-        setModalInfo({
-          active: true,
-          type: ERROR,
-          message: err.message,
-        })
+      if (product) {
+        try {
+          await updateProduct(product.id, value)
+          router.push('/dashboard/products')
+        } catch (err) {
+          console.log(err)
+        }
+      } else {
+        try {
+          await addProduct(value)
+          setAlert({
+            active: true,
+            message: '¡Your product was successfully created!',
+            type: PRODUCT_CREATED,
+            autoClose: true,
+          })
+          setOpenForm(false)
+        } catch (err) {
+          setModalInfo({
+            active: true,
+            type: ERROR,
+            message: err.message,
+          })
+        }
       }
     }
   }
 
   return (
     <>
+      <ModalInfo toggleModalInfo={toggleModalInfo} modalInfo={modalInfo} />
       <form ref={formRef} onSubmit={handleSubmit}>
         <div className="overflow-hidden">
           <div className="px-4 py-5 bg-white sm:p-6">
@@ -54,6 +91,7 @@ export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, 
                   Title
                 </label>
                 <input
+                  defaultValue={product?.title}
                   type="text"
                   name="title"
                   id="title"
@@ -65,6 +103,7 @@ export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, 
                   Price
                 </label>
                 <input
+                  defaultValue={product?.price}
                   type="number"
                   name="price"
                   id="price"
@@ -76,6 +115,7 @@ export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, 
                   Category
                 </label>
                 <select
+                  ref={categorySelect}
                   id="category"
                   name="category"
                   autoComplete="category-name"
@@ -94,6 +134,7 @@ export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, 
                   Description
                 </label>
                 <textarea
+                  defaultValue={product?.description}
                   name="description"
                   id="description"
                   autoComplete="description"
@@ -103,7 +144,9 @@ export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, 
               </div>
               <div className="col-span-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Cover photo</label>
+                  <label htmlFor="avatar" className="block text-sm font-medium text-gray-700">
+                    Cover photo
+                  </label>
                   <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                     <div className="space-y-1 text-center">
                       <svg
@@ -126,7 +169,7 @@ export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, 
                           className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                         >
                           <span>Upload a file</span>
-                          <input id="images" name="images" type="file" className="sr-only" />
+                          <input defaultValue={product?.images} id="images" name="images" type="file" className="sr-only" />
                         </label>
                         <p className="pl-1">or drag and drop</p>
                       </div>
@@ -147,7 +190,6 @@ export default function FormProduct({ setModalInfo, toggleModalInfo, modalInfo, 
           </div>
         </div>
       </form>
-      <ModalInfo toggleModalInfo={toggleModalInfo} modalInfo={modalInfo} />
     </>
   )
 }

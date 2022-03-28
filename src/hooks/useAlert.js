@@ -1,6 +1,17 @@
-import { useState } from 'react'
+import { useState, createContext, useContext } from 'react'
 
-const useAlert = (options) => {
+const AlertContext = createContext()
+
+export function ProviderAlert({ children }) {
+  const alert = useProviderAlert()
+  return <AlertContext.Provider value={alert}>{children}</AlertContext.Provider>
+}
+
+export const useAlert = () => {
+  return useContext(AlertContext)
+}
+
+const useProviderAlert = (options) => {
   const defaultOptions = {
     active: false,
     message: '',
@@ -22,5 +33,3 @@ const useAlert = (options) => {
     toggleAlert,
   }
 }
-
-export default useAlert

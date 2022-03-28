@@ -1,18 +1,19 @@
 import { XCircleIcon } from '@heroicons/react/solid'
+import { useAlert } from '@hooks/useAlert'
 import { ERROR, PRODUCT_CREATED } from '@services/api/products'
 
-const Alert = ({ alert, handleClose }) => {
+const Alert = () => {
+  const { alert, toggleAlert } = useAlert()
   const { active, message, type, autoClose } = alert
   if (alert && autoClose && type === PRODUCT_CREATED) {
     setTimeout(() => {
-      handleClose()
+      toggleAlert()
     }, 9000)
   }
   let classesBg = ''
   let classesText = ''
 
   if (type === PRODUCT_CREATED) {
-    console.log('entre')
     classesBg = 'bg-green-100'
     classesText = 'text-gray-600'
   } else if (type === ERROR) {
@@ -27,7 +28,7 @@ const Alert = ({ alert, handleClose }) => {
           <div className="flex space-x-3">
             <div className={`flex-1 leading-tight text-sm font-medium ${classesText}`}>{message}</div>
             <button type="button">
-              <XCircleIcon className="w-6 h-6 text-gray-600" onClick={handleClose} />
+              <XCircleIcon className="w-6 h-6 text-gray-600" onClick={toggleAlert} />
             </button>
           </div>
         </div>

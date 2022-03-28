@@ -6,14 +6,15 @@ import useModalInfo from '@hooks/useModalInfo'
 import { getAllProducts } from '@services/api/products'
 import { PRODUCT_ERRASED, deleteProduct, ERROR, SUCCESS } from '@services/api/products'
 import ModalInfo from '@common/ModalInfo'
-import useAlert from '@hooks/useAlert'
+import { useAlert } from '@hooks/useAlert'
 import Alert from '@common/Alert'
+import Link from 'next/link'
 
 export default function Products() {
   const [openForm, setOpenForm] = useState(false)
   const [products, setProducts] = useState([])
   const { setModalInfo, toggleModalInfo, modalInfo } = useModalInfo()
-  const { alert, setAlert, toggleAlert } = useAlert()
+  const { alert } = useAlert()
   const [productToDelete, setProductToDelete] = useState(0)
 
   useEffect(() => {
@@ -53,7 +54,21 @@ export default function Products() {
 
   return (
     <>
-      <Alert alert={alert} handleClose={toggleAlert} />
+      <Alert />
+      <Modal openForm={openForm} setOpenForm={setOpenForm}>
+        <FormProduct
+          setOpenForm={setOpenForm}
+          setModalInfo={setModalInfo}
+          toggleModalInfo={toggleModalInfo}
+          modalInfo={modalInfo}
+        />
+      </Modal>
+      <ModalInfo
+        toggleModalInfo={toggleModalInfo}
+        modalInfo={modalInfo}
+        handleDelete={handleDelete}
+        productId={productToDelete}
+      />
       <div className="lg:flex lg:items-center lg:justify-between mb-8">
         <div className="flex-1 min-w-0">
           <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">List of products</h2>
@@ -131,9 +146,9 @@ export default function Products() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/edit" className="text-indigo-600 hover:text-indigo-900">
+                        <Link href={`edit/${product.id}`} className="text-indigo-600 hover:text-indigo-900">
                           Edit
-                        </a>
+                        </Link>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
@@ -151,21 +166,6 @@ export default function Products() {
           </div>
         </div>
       </div>
-      <Modal openForm={openForm} setOpenForm={setOpenForm}>
-        <FormProduct
-          setOpenForm={setOpenForm}
-          setAlert={setAlert}
-          setModalInfo={setModalInfo}
-          toggleModalInfo={toggleModalInfo}
-          modalInfo={modalInfo}
-        />
-      </Modal>
-      <ModalInfo
-        toggleModalInfo={toggleModalInfo}
-        modalInfo={modalInfo}
-        handleDelete={handleDelete}
-        productId={productToDelete}
-      />
     </>
   )
 }

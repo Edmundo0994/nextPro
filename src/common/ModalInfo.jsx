@@ -4,21 +4,20 @@ import { ExclamationIcon, BadgeCheckIcon, InformationCircleIcon } from '@heroico
 import { ERROR, PRODUCT_CREATED, PRODUCT_ERRASED, SUCCESS } from '@services/api/products'
 
 const ModalInfo = ({ modalInfo, toggleModalInfo, handleDelete, productId }) => {
-  const { active, message, type } = modalInfo
   let classesButton = ''
   let classesIcon = ''
-  if (type === ERROR) {
+  if (modalInfo?.type === ERROR) {
     classesButton = 'hover:bg-red-700 bg-red-600 focus:ring-red-500'
     classesIcon = 'bg-red-10'
-  } else if (type === PRODUCT_ERRASED) {
+  } else if (modalInfo?.type === PRODUCT_ERRASED) {
     classesButton = 'hover:bg-yellow-700 bg-yellow-600 focus:ring-yellow-500'
     classesIcon = 'bg-yellow-10'
-  } else if (type === PRODUCT_CREATED || type === SUCCESS) {
+  } else if (modalInfo?.type === PRODUCT_CREATED || modalInfo?.type === SUCCESS) {
     classesButton = 'hover:bg-green-700 bg-green-600 focus:ring-green-500'
     classesIcon = 'bg-green-10'
   }
   return (
-    <Transition.Root show={active || false} as={Fragment}>
+    <Transition.Root show={modalInfo?.active || false} as={Fragment}>
       <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={toggleModalInfo}>
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
@@ -53,32 +52,32 @@ const ModalInfo = ({ modalInfo, toggleModalInfo, handleDelete, productId }) => {
                     className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full 0 sm:mx-0 sm:h-10 sm:w-10 ${classesIcon}`}
                   >
                     {/* Icon */}
-                    {type === ERROR && <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" />}
-                    {(type === PRODUCT_CREATED || type === SUCCESS) && (
+                    {modalInfo?.type === ERROR && <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" />}
+                    {(modalInfo?.type === PRODUCT_CREATED || modalInfo?.type === SUCCESS) && (
                       <BadgeCheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
                     )}
-                    {type === PRODUCT_ERRASED && (
+                    {modalInfo?.type === PRODUCT_ERRASED && (
                       <InformationCircleIcon className="h-6 w-6 text-yellow-600" aria-hidden="true" />
                     )}
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
                       {/* Title for the modalInfo */}
-                      {type === ERROR && '¡Ups!'}
-                      {(type === PRODUCT_CREATED || type === SUCCESS) && "¡That's great!"}
-                      {type === PRODUCT_ERRASED && '¡Caution!'}
+                      {modalInfo?.type === ERROR && '¡Ups!'}
+                      {(modalInfo?.type === PRODUCT_CREATED || modalInfo?.type === SUCCESS) && "¡That's great!"}
+                      {modalInfo?.type === PRODUCT_ERRASED && '¡Caution!'}
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
                         {/* Message for the modalInfo */}
-                        {message}
+                        {modalInfo?.message}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                {(type === ERROR || type === PRODUCT_CREATED || type === SUCCESS) && (
+                {(modalInfo?.type === ERROR || modalInfo?.type === PRODUCT_CREATED || modalInfo?.type === SUCCESS) && (
                   <>
                     <button
                       type="button"
@@ -92,7 +91,7 @@ const ModalInfo = ({ modalInfo, toggleModalInfo, handleDelete, productId }) => {
                     </button>
                   </>
                 )}
-                {type === PRODUCT_ERRASED && (
+                {modalInfo?.type === PRODUCT_ERRASED && (
                   <>
                     <button
                       type="button"

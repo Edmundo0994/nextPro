@@ -12,7 +12,6 @@ const navigation = [
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
 ]
 
 function classNames(...classes) {
@@ -103,6 +102,11 @@ export default function Header() {
                               )}
                             </Menu.Item>
                           ))}
+                          <Menu.Item key={'logOut'}>
+                            <button onClick={auth.logOut} className="block px-4 py-2 text-sm text-gray-700">
+                              Log out
+                            </button>
+                          </Menu.Item>
                         </Menu.Items>
                       </Transition>
                     </Menu>

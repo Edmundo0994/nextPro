@@ -1,11 +1,8 @@
-import { useState } from 'react'
 import FooterPag from '@common/FooterPag'
-import Modal from '@common/Modal'
 import BarChart from '@common/BarChart'
 import useProducts from '@hooks/useProducts'
 
 export default function Dashboard() {
-  const [openForm, setOpenForm] = useState(false)
   const products = useProducts()
 
   const data = {
